@@ -1,9 +1,9 @@
 const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; // Replace with your API key
-const sheetId = '1oFaCCfJBVwENz3SAzDIpEHigq4nMPARlihgvTxldml4'; // Replace with your Google Sheet ID
+const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU'; // Replace with your Google Sheet ID
 const sheetName = 'LastDay'; // Replace with your sheet name if different
 
 // Replace 'A1:D10' with the range you want to fetch from your Google Sheet
-const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:AB200?key=${apiKey}`;
+const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:S?key=${apiKey}`;
 
 fetch(apiUrl)
     .then((response) => response.json())
