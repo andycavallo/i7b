@@ -1,4 +1,4 @@
-const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; // Replace with your API key
+const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF3I'; // Replace with your API key
 const sheetId = '1oFaCCfJBVwENz3SAzDIpEHigq4nMPARlihgvTxldml4'; // Replace with your Google Sheet ID
 const sheetName = 'LastDay'; // Replace with your sheet name if different
 
