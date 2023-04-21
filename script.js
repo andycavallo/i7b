@@ -11,7 +11,7 @@ fetch(apiUrl)
     const rows = data.values;
     let content = '<table>';
 
-    rows.forEach((row) => {
+    rows.forEach((row, rowIndex) => {
       const rank = parseInt(row[0]);
       const currentClan = row[2];
 
@@ -27,9 +27,12 @@ fetch(apiUrl)
       const spostamento = currentClan !== targetClan ? `${currentClan} -> ${targetClan}` : '';
 
       // Add 'change-clan' class if the player needs to change their clan
-      const rowClass = spostamento ? 'change-clan' : '';
+      const rowClass = spostamento && rowIndex !== 0 ? 'change-clan' : '';
 
-      content += `<tr class="${rowClass}"><td>${row[0]}</td><td>${row[2]}</td><td>${row[7]}</td><td>${row[8]}</td><td>${row[11]}</td><td>${spostamento}</td></tr>`;
+      // Set the header text for the Spostamento column
+      const spostamentoHeaderText = rowIndex === 0 ? 'Spostamento' : spostamento;
+
+      content += `<tr class="${rowClass}"><td>${row[0]}</td><td>${row[2]}</td><td>${row[7]}</td><td>${row[8]}</td><td>${row[11]}</td><td>${spostamentoHeaderText}</td></tr>`;
     });
 
     content += '</table>';
