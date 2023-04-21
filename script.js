@@ -18,7 +18,7 @@ fetch(apiUrl)
       let targetClan;
       if (rank >= 1 && rank <= 50) {
         targetClan = 'I7B';
-      } else if (rank >= 51 && rank <= 101) {
+      } else if (rank >= 51 && rank <= 100) {
         targetClan = 'I7B2';
       } else {
         targetClan = 'I7B3';
