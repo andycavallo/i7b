@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const fetch = require('node-fetch');
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
-const chatId = 'YOUR_TELEGRAM_GROUP_CHAT_ID';
+const chatId = '-593849708';
 const apiUrl = process.env.GOOGLE_SHEETS_API_URL;
 
 const bot = new TelegramBot(botToken, { polling: true });
