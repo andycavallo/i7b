@@ -1,5 +1,5 @@
 const Telegraf = require('telegraf');
-const fetch = require('node-fetch');
+const fetch = require('node-fetch').default;
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const chatId = '-593849708';
