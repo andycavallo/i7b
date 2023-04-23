@@ -1,4 +1,4 @@
-const Telegraf = require('telegraf');
+import { Telegraf } from 'telegraf';
 import fetch from 'node-fetch';
 
 const botToken = '6272905596:AAH2fuVa-sgg1nGzuz473vjij2tG7n8Xptc';
