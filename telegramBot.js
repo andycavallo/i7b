@@ -1,20 +1,20 @@
-const TelegramBot = require('node-telegram-bot-api');
+const Telegraf = require('telegraf');
 const fetch = require('node-fetch');
 
 const botToken = '6272905596:AAH2fuVa-sgg1nGzuz473vjij2tG7n8Xptc';
 const chatId = '-593849708';
 const apiUrl = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I';
 
-const bot = new TelegramBot(botToken, { polling: true });
+const bot = new Telegraf(botToken);
 
-bot.onText(/\/spostamenti/, async () => {
+bot.command('spostamenti', async (ctx) => {
   const playersToMove = await fetchPlayersToMove();
 
   if (playersToMove.length === 0) {
-    bot.sendMessage(chatId, 'No players need to change their clan.');
+    ctx.reply('No players need to change their clan.');
   } else {
     const message = playersToMove.join('\n');
-    bot.sendMessage(chatId, `Players who need to change their clan:\n\n${message}`);
+    ctx.reply(`Players who need to change their clan:\n\n${message}`);
   }
 });
 
@@ -50,3 +50,7 @@ async function fetchPlayersToMove() {
 
   return playersToMove;
 }
+
+bot.launch();
+
+console.log('Bot started');
