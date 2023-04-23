@@ -7,6 +7,10 @@ const apiUrl = process.env.GOOGLE_SHEETS_API_URL;
 
 const bot = new Telegraf(botToken);
 
+bot.start((ctx) => {
+  ctx.reply('Welcome to the spostamenti bot! Type /spostamenti to see which players need to change their clan.');
+});
+
 bot.command('spostamenti', async (ctx) => {
   const playersToMove = await fetchPlayersToMove();
 
