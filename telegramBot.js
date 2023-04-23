@@ -7,6 +7,10 @@ const apiUrl = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I';
 
 const bot = new Telegraf(botToken);
 
+bot.start((ctx) => {
+  ctx.reply('Welcome to the spostamenti bot! Type /spostamenti to see which players need to change their clan.');
+});
+
 bot.command('spostamenti', async (ctx) => {
   const playersToMove = await fetchPlayersToMove();
 
