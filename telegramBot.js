@@ -7,7 +7,7 @@ const apiUrl = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I';
 
 const bot = new TelegramBot(botToken, { polling: true });
 
-bot.onText(/\/botbello spostamenti/, async () => {
+bot.onText(/\/spostamenti/, async () => {
   const playersToMove = await fetchPlayersToMove();
 
   if (playersToMove.length === 0) {
