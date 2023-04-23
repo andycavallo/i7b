@@ -7,7 +7,7 @@ const apiUrl = process.env.GOOGLE_SHEETS_API_URL;
 
 const bot = new TelegramBot(botToken, { polling: true });
 
-bot.onText(/\/botbello spostamenti/, async () => {
+bot.onText(/\/spostamenti/, async () => {
   const playersToMove = await fetchPlayersToMove();
 
   if (playersToMove.length === 0) {
