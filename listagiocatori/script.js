@@ -21,7 +21,13 @@ fetch(apiUrl)
     });
 
     // Sort players first by clan name and then by trophies
-    players.sort((a, b) => a.currentClan !== b.currentClan ? a.currentClan.localeCompare(b.currentClan) : b.trophies - a.trophies);
+    players.sort((a, b) => {
+      if (!a.currentClan && !b.currentClan) return 0;
+      if (!a.currentClan) return 1;
+      if (!b.currentClan) return -1;
+      if (a.currentClan !== b.currentClan) return a.currentClan.localeCompare(b.currentClan);
+      return b.trophies - a.trophies;
+    });
 
     let content = '<table>';
     content += '<tr><td>Clan</td><td>Name</td><td>Trophies</td></tr>'; // Table headers
