@@ -8,36 +8,29 @@ fetch(apiUrl)
   .then((response) => response.json())
   .then((data) => {
     const rows = data.values;
-    let clans = {};
+    let players = [];
 
     rows.forEach((row, rowIndex) => {
       if(rowIndex === 0) return; // Skip header row
 
-      const playerName = row[1];
-      const currentClan = row[2];
-      const trophies = parseInt(row[8]);
+      const playerName = row[7]; // Assuming this is column H
+      const currentClan = row[2]; // Assuming this is column C
+      const trophies = parseInt(row[8]); // Assuming this is column I
 
-      if(!clans[currentClan]){
-        clans[currentClan] = [];
-      }
-      
-      clans[currentClan].push({playerName, trophies});
+      players.push({currentClan, playerName, trophies});
     });
 
-    let content = '';
+    // Sort players first by clan name and then by trophies
+    players.sort((a, b) => a.currentClan !== b.currentClan ? a.currentClan.localeCompare(b.currentClan) : b.trophies - a.trophies);
 
-    for(let clan in clans){
-      clans[clan].sort((a,b) => b.trophies - a.trophies); // Sort players within a clan by trophies
+    let content = '<table>';
+    content += '<tr><td>Clan</td><td>Name</td><td>Trophies</td></tr>'; // Table headers
 
-      content += `<h2>${clan}</h2><table>`;
-      content += '<tr><td>Name</td><td>Trophies</td></tr>';
+    players.forEach(player => {
+      content += `<tr><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td></tr>`;
+    });
 
-      clans[clan].forEach(player => {
-        content += `<tr><td>${player.playerName}</td><td>${player.trophies}</td></tr>`;
-      });
-
-      content += '</table>';
-    }
+    content += '</table>';
 
     document.getElementById('content').innerHTML = content;
   })
