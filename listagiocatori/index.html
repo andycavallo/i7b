@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List Giocatori I7B</title>
+    <title>Spostamenti I7B</title>
     <style>
         .tableWrapper {
             max-height: 600px; /* Adjust to suit your needs */
             overflow-y: auto;
+            display: inline-block;
+            width: 100%;
         }
         table {
             border-collapse: collapse;
             width: 100%;
-            table-layout: auto;
         }
         th, td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
         }
-        th {
+        thead th {
             position: sticky;
             top: 0;
             background-color: #fff;
@@ -36,7 +37,9 @@
     </style>
 </head>
 <body>
-    <div class="tableWrapper" id="content"></div>
+    <div class="tableWrapper">
+        <div id="content"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
