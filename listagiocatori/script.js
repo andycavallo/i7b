@@ -13,12 +13,12 @@ fetch(apiUrl)
     rows.forEach((row, rowIndex) => {
       if(rowIndex === 0) return; // Skip header row
 
-      const playerName = row[7]; // Assuming this is column H
-      const currentClan = row[2]; // Assuming this is column C
-      const trophies = parseInt(row[8]); // Assuming this is column I
-      const grado = row[19]; // Assuming this is column T
-      const nomeTelegram = row[20]; // Assuming this is column U
-      const usernameTelegram = row[21]; // Assuming this is column V
+      const playerName = row[7] || ''; // Assuming this is column H
+      const currentClan = row[2] || ''; // Assuming this is column C
+      const trophies = parseInt(row[8]) || ''; // Assuming this is column I
+      const grado = row[19] || ''; // Assuming this is column T
+      const nomeTelegram = row[20] || ''; // Assuming this is column U
+      const usernameTelegram = row[21] || ''; // Assuming this is column V
 
       players.push({currentClan, playerName, trophies, grado, nomeTelegram, usernameTelegram});
     });
