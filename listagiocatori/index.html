@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spostamenti I7B</title>
     <style>
-        .tableWrapper {
-            max-height: 600px;
+        .scrollable {
+            height: 600px; 
             overflow-y: auto;
-            width: 100%;
+            display: block;
         }
         table {
             border-collapse: collapse;
@@ -18,9 +18,6 @@
             border: 1px solid black;
             padding: 8px;
             text-align: left;
-        }
-        thead {
-            background-color: #fff;
         }
         .generale {
             background-color: lightcoral;
@@ -34,9 +31,12 @@
     </style>
 </head>
 <body>
-    <div class="tableWrapper" id="content"></div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/StickyTableHeaders/0.1.19/js/jquery.stickytableheaders.min.js"></script>
+    <table>
+        <thead>
+            <tr><th>Clan Name</th><th>ID</th><th>Name</th><th>Trophies</th><th>Grado</th><th>Nome Telegram</th><th>Username Telegram</th></tr>
+        </thead>
+        <tbody class="scrollable" id="content"></tbody>
+    </table>
     <script src="script.js"></script>
 </body>
 </html>
