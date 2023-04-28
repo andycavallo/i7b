@@ -2,7 +2,7 @@ const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; // Replace with your A
 const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU'; // Replace with your Google Sheet ID
 const sheetName = 'LastDay'; // Replace with your sheet name if different
 
-const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:S?key=${apiKey}`;
+const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:V?key=${apiKey}`;
 
 fetch(apiUrl)
   .then((response) => response.json())
@@ -16,8 +16,11 @@ fetch(apiUrl)
       const playerName = row[7]; // Assuming this is column H
       const currentClan = row[2]; // Assuming this is column C
       const trophies = parseInt(row[8]); // Assuming this is column I
+      const grado = row[19]; // Assuming this is column T
+      const nomeTelegram = row[20]; // Assuming this is column U
+      const usernameTelegram = row[21]; // Assuming this is column V
 
-      players.push({currentClan, playerName, trophies});
+      players.push({currentClan, playerName, trophies, grado, nomeTelegram, usernameTelegram});
     });
 
     // Sort players first by clan name and then by trophies
@@ -30,10 +33,10 @@ fetch(apiUrl)
     });
 
     let content = '<table>';
-    content += '<tr><td>Clan</td><td>Name</td><td>Trophies</td></tr>'; // Table headers
+    content += '<tr><td>Clan</td><td>Name</td><td>Trophies</td><td>Grado</td><td>Nome Telegram</td><td>Username Telegram</td></tr>'; // Table headers
 
     players.forEach(player => {
-      content += `<tr><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td></tr>`;
+      content += `<tr><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td>${player.usernameTelegram}</td></tr>`;
     });
 
     content += '</table>';
