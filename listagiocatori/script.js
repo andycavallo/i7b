@@ -2,61 +2,59 @@ const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; // Replace with your A
 const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU'; // Replace with your Google Sheet ID
 const sheetName = 'LastDay'; // Replace with your sheet name if different
 
+// Replace 'A1:D10' with the range you want to fetch from your Google Sheet
 const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:V?key=${apiKey}`;
 
 fetch(apiUrl)
   .then((response) => response.json())
   .then((data) => {
     const rows = data.values;
-    let players = [];
+
+    // Sort rows by Clan name first and then by Trophies
+    rows.sort((a, b) => {
+      const clanA = a[2] || '';
+      const clanB = b[2] || '';
+      const trophiesA = parseInt(a[8]) || 0;
+      const trophiesB = parseInt(b[8]) || 0;
+
+      if (clanA === clanB) {
+        return trophiesB - trophiesA; // Descending order for trophies
+      } else {
+        return clanA.localeCompare(clanB);
+      }
+    });
+
+    let content = '<table><thead><tr><th>Clan Name</th><th>ID</th><th>Name</th><th>Trophies</th><th>Grado</th><th>Nome Telegram</th><th>Username Telegram</th></tr></thead><tbody>';
 
     rows.forEach((row, rowIndex) => {
-      if(rowIndex === 0) return; // Skip header row
-
-      const playerID = row[6] || ''; // Assuming this is column G
-      const playerName = row[7] || ''; // Assuming this is column H
-      const currentClan = row[2] || ''; // Assuming this is column C
-      const trophies = parseInt(row[8]) || ''; // Assuming this is column I
-      const grado = row[19] || ''; // Assuming this is column T
-      const nomeTelegram = row[20] || ''; // Assuming this is column U
-      const usernameTelegram = row[21] || ''; // Assuming this is column V
-
-      players.push({playerID, currentClan, playerName, trophies, grado, nomeTelegram, usernameTelegram});
-    });
-
-    // Sort players first by clan name and then by trophies
-    players.sort((a, b) => {
-      if (!a.currentClan && !b.currentClan) return 0;
-      if (!a.currentClan) return 1;
-      if (!b.currentClan) return -1;
-      if (a.currentClan !== b.currentClan) return a.currentClan.localeCompare(b.currentClan);
-      return b.trophies - a.trophies;
-    });
-
-    let content = '<table>';
-    content += '<tr><td>ID</td><td>Clan</td><td>Name</td><td>Trophies</td><td>Grado</td><td>Nome Telegram</td><td>Username Telegram</td></tr>'; // Table headers
-
-    players.forEach(player => {
-      let rowClass = '';
-      switch(player.grado) {
-        case 'Generale':
-          rowClass = 'generale';
-          break;
-        case 'Capitano':
-          rowClass = 'capitano';
-          break;
-        case 'Tenente':
-          rowClass = 'tenente';
-          break;
+      const clanName = row[2] || '';
+      const id = row[6] || '';
+      const name = row[7] || '';
+      const trophies = row[8] || '';
+      const grado = row[19] || '';
+      const nomeTelegram = row[20] || '';
+      let usernameTelegram = row[21] || '';
+      if (usernameTelegram) {
+        usernameTelegram = `<a href='https://t.me/${usernameTelegram}'>${usernameTelegram}</a>`;
       }
 
-      let usernameTelegramCellContent = player.usernameTelegram ? `<a href="https://t.me/${player.usernameTelegram}" target="_blank">${player.usernameTelegram}</a>` : '';
+      // Determine the row class based on the Grado
+      let rowClass = '';
+      if (grado.includes('Generale')) {
+        rowClass = 'generale';
+      } else if (grado.includes('Capitano')) {
+        rowClass = 'capitano';
+      } else if (grado.includes('Tenente')) {
+        rowClass = 'tenente';
+      }
 
-      content += `<tr class="${rowClass}"><td>${player.playerID}</td><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td>${usernameTelegramCellContent}</td></tr>`;
+      content += `<tr class="${rowClass}"><td>${clanName}</td><td>${id}</td><td>${name}</td><td>${trophies}</td><td>${grado}</td><td>${nomeTelegram}</td><td>${usernameTelegram}</td></tr>`;
     });
 
-    content += '</table>';
-
+    content += '</tbody></table>';
     document.getElementById('content').innerHTML = content;
+    
+    // Add sticky table headers
+    $('table').stickyTableHeaders();
   })
   .catch((error) => console.error('Error fetching data:', error));
