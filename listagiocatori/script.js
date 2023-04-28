@@ -8,34 +8,55 @@ fetch(apiUrl)
   .then((response) => response.json())
   .then((data) => {
     const rows = data.values;
-    rows.shift(); // Remove the header row
+    let players = [];
 
-    rows.sort((a, b) => {
-      if (a[2] === b[2]) {
-        return b[8] - a[8]; // Sort by Trophies if Clan name is the same
-      }
-      return a[2].localeCompare(b[2]); // Sort by Clan name
+    rows.forEach((row, rowIndex) => {
+      if(rowIndex === 0) return; // Skip header row
+
+      const playerID = row[6] || ''; // Assuming this is column G
+      const playerName = row[7] || ''; // Assuming this is column H
+      const currentClan = row[2] || ''; // Assuming this is column C
+      const trophies = parseInt(row[8]) || ''; // Assuming this is column I
+      const grado = row[19] || ''; // Assuming this is column T
+      const nomeTelegram = row[20] || ''; // Assuming this is column U
+      const usernameTelegram = row[21] || ''; // Assuming this is column V
+
+      players.push({playerID, currentClan, playerName, trophies, grado, nomeTelegram, usernameTelegram});
     });
 
-    rows.forEach((row) => {
-      const clanName = row[2] || '';
-      const id = row[6] || '';
-      const name = row[7] || '';
-      const trophies = row[8] || '';
-      const grado = row[19] || '';
-      const nomeTelegram = row[20] || '';
-      const usernameTelegram = row[21] ? `<a href="https://t.me/${row[21]}" target="_blank">${row[21]}</a>` : '';
+    // Sort players first by clan name and then by trophies
+    players.sort((a, b) => {
+      if (!a.currentClan && !b.currentClan) return 0;
+      if (!a.currentClan) return 1;
+      if (!b.currentClan) return -1;
+      if (a.currentClan !== b.currentClan) return a.currentClan.localeCompare(b.currentClan);
+      return b.trophies - a.trophies;
+    });
 
+    let content = '<table>';
+    content += '<tr><td>ID</td><td>Clan</td><td>Name</td><td>Trophies</td><td>Grado</td><td>Nome Telegram</td><td>Username Telegram</td></tr>'; // Table headers
+
+    players.forEach(player => {
       let rowClass = '';
-      if (grado.includes('Generale')) {
-        rowClass = 'generale';
-      } else if (grado.includes('Capitano')) {
-        rowClass = 'capitano';
-      } else if (grado.includes('Tenente')) {
-        rowClass = 'tenente';
+      switch(player.grado) {
+        case 'Generale':
+          rowClass = 'generale';
+          break;
+        case 'Capitano':
+          rowClass = 'capitano';
+          break;
+        case 'Tenente':
+          rowClass = 'tenente';
+          break;
       }
-      const content = `<tr class="${rowClass}"><td>${clanName}</td><td>${id}</td><td>${name}</td><td>${trophies}</td><td>${grado}</td><td>${nomeTelegram}</td><td>${usernameTelegram}</td></tr>`;
-      document.getElementById('content').insertAdjacentHTML('beforeend', content);
+
+      let usernameTelegramCellContent = player.usernameTelegram ? `<a href="https://t.me/${player.usernameTelegram}" target="_blank">${player.usernameTelegram}</a>` : '';
+
+      content += `<tr class="${rowClass}"><td>${player.playerID}</td><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td>${usernameTelegramCellContent}</td></tr>`;
     });
+
+    content += '</table>';
+
+    document.getElementById('content').innerHTML = content;
   })
   .catch((error) => console.error('Error fetching data:', error));
