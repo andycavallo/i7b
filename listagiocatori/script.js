@@ -49,7 +49,7 @@ fetch(apiUrl)
           break;
       }
       
-      content += `<tr class="${rowClass}"><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td>${player.usernameTelegram}</td></tr>`;
+      content += `<tr class="${rowClass}"><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td><a href="https://t.me/${player.usernameTelegram}" target="_blank">${player.usernameTelegram}</a></td></tr>`;
     });
 
     content += '</table>';
