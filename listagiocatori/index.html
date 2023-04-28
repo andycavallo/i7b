@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista giocatori I7B</title>
+    <title>Spostamenti I7B</title>
     <style>
         table {
             border-collapse: collapse;
             width: 100%;
+            table-layout: fixed;
         }
         th, td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
+        }
+        th {
+            background-color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
         .generale {
             background-color: lightcoral;
