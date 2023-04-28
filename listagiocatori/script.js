@@ -36,7 +36,20 @@ fetch(apiUrl)
     content += '<tr><td>Clan</td><td>Name</td><td>Trophies</td><td>Grado</td><td>Nome Telegram</td><td>Username Telegram</td></tr>'; // Table headers
 
     players.forEach(player => {
-      content += `<tr><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td>${player.usernameTelegram}</td></tr>`;
+      let rowClass = '';
+      switch(player.grado) {
+        case 'Generale':
+          rowClass = 'generale';
+          break;
+        case 'Capitano':
+          rowClass = 'capitano';
+          break;
+        case 'Tenente':
+          rowClass = 'tenente';
+          break;
+      }
+      
+      content += `<tr class="${rowClass}"><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td>${player.usernameTelegram}</td></tr>`;
     });
 
     content += '</table>';
