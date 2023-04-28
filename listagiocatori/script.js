@@ -13,6 +13,8 @@ fetch(apiUrl)
     allRows.shift(); // Remove the header row
     const uniqueClans = [...new Set(allRows.map(row => row[2]))];
 
+    console.log(uniqueClans); // Add this line to debug
+
     const dropdown = document.getElementById('clan-filter');
     dropdown.innerHTML = '<option value="">All Clans</option>' + uniqueClans.map(clan => `<option value="${clan}">${clan}</option>`).join('');
 
@@ -24,6 +26,7 @@ fetch(apiUrl)
     updateTable();
   })
   .catch((error) => console.error('Error fetching data:', error));
+
 
 function updateTable(clanFilter = '') {
   const filteredRows = clanFilter ? allRows.filter(row => row[2] === clanFilter) : [...allRows];
