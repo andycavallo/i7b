@@ -8,7 +8,6 @@
         .tableWrapper {
             max-height: 600px; /* Adjust to suit your needs */
             overflow-y: auto;
-            display: inline-block;
             width: 100%;
         }
         table {
@@ -20,7 +19,7 @@
             padding: 8px;
             text-align: left;
         }
-        thead th {
+        thead {
             position: sticky;
             top: 0;
             background-color: #fff;
@@ -37,9 +36,25 @@
     </style>
 </head>
 <body>
-    <div class="tableWrapper">
-        <div id="content"></div>
-    </div>
+    <div class="tableWrapper" id="content"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        $(document).ready(function() {
+            var $table = $('table');
+            var $bodyCells = $table.find('tbody tr:first').children();
+            var colWidth;
+
+            $(window).resize(function() {
+                colWidth = $bodyCells.map(function() {
+                    return $(this).width();
+                }).get();
+                
+                $table.find('thead tr').children().each(function(i, v) {
+                    $(v).width(colWidth[i]);
+                });    
+            }).resize();
+        });
+    </script>
 </body>
 </html>
