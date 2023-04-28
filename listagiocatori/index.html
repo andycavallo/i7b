@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spostamenti I7B</title>
     <style>
-        .scrollable {
-            height: 600px; 
-            overflow-y: auto;
-            display: block;
-        }
         table {
             border-collapse: collapse;
             width: 100%;
+            display: block;
+            overflow: auto;
         }
         th, td {
             border: 1px solid black;
@@ -28,14 +25,25 @@
         .tenente {
             background-color: lightgreen;
         }
+        th {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            background: white;
+        }
     </style>
 </head>
 <body>
-    <table>
-        <thead>
-            <tr><th>Clan Name</th><th>ID</th><th>Name</th><th>Trophies</th><th>Grado</th><th>Nome Telegram</th><th>Username Telegram</th></tr>
-        </thead>
-        <tbody class="scrollable" id="content"></tbody>
+    <table id="content">
+        <tr>
+            <th>Clan Name</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Trophies</th>
+            <th>Grado</th>
+            <th>Nome Telegram</th>
+            <th>Username Telegram</th>
+        </tr>
     </table>
     <script src="script.js"></script>
 </body>
