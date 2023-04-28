@@ -6,7 +6,7 @@
     <title>Spostamenti I7B</title>
     <style>
         .tableWrapper {
-            max-height: 600px; /* Adjust to suit your needs */
+            max-height: 600px;
             overflow-y: auto;
             width: 100%;
         }
@@ -20,8 +20,6 @@
             text-align: left;
         }
         thead {
-            position: sticky;
-            top: 0;
             background-color: #fff;
         }
         .generale {
@@ -38,23 +36,7 @@
 <body>
     <div class="tableWrapper" id="content"></div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/StickyTableHeaders/0.1.19/js/jquery.stickytableheaders.min.js"></script>
     <script src="script.js"></script>
-    <script>
-        $(document).ready(function() {
-            var $table = $('table');
-            var $bodyCells = $table.find('tbody tr:first').children();
-            var colWidth;
-
-            $(window).resize(function() {
-                colWidth = $bodyCells.map(function() {
-                    return $(this).width();
-                }).get();
-                
-                $table.find('thead tr').children().each(function(i, v) {
-                    $(v).width(colWidth[i]);
-                });    
-            }).resize();
-        });
-    </script>
 </body>
 </html>
