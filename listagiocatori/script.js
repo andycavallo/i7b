@@ -13,6 +13,7 @@ fetch(apiUrl)
     rows.forEach((row, rowIndex) => {
       if(rowIndex === 0) return; // Skip header row
 
+      const playerID = row[6] || ''; // Assuming this is column G
       const playerName = row[7] || ''; // Assuming this is column H
       const currentClan = row[2] || ''; // Assuming this is column C
       const trophies = parseInt(row[8]) || ''; // Assuming this is column I
@@ -20,7 +21,7 @@ fetch(apiUrl)
       const nomeTelegram = row[20] || ''; // Assuming this is column U
       const usernameTelegram = row[21] || ''; // Assuming this is column V
 
-      players.push({currentClan, playerName, trophies, grado, nomeTelegram, usernameTelegram});
+      players.push({playerID, currentClan, playerName, trophies, grado, nomeTelegram, usernameTelegram});
     });
 
     // Sort players first by clan name and then by trophies
@@ -33,7 +34,7 @@ fetch(apiUrl)
     });
 
     let content = '<table>';
-    content += '<tr><td>Clan</td><td>Name</td><td>Trophies</td><td>Grado</td><td>Nome Telegram</td><td>Username Telegram</td></tr>'; // Table headers
+    content += '<tr><td>ID</td><td>Clan</td><td>Name</td><td>Trophies</td><td>Grado</td><td>Nome Telegram</td><td>Username Telegram</td></tr>'; // Table headers
 
     players.forEach(player => {
       let rowClass = '';
@@ -48,8 +49,10 @@ fetch(apiUrl)
           rowClass = 'tenente';
           break;
       }
-      
-      content += `<tr class="${rowClass}"><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td><a href="https://t.me/${player.usernameTelegram}" target="_blank">${player.usernameTelegram}</a></td></tr>`;
+
+      let usernameTelegramCellContent = player.usernameTelegram ? `<a href="https://t.me/${player.usernameTelegram}" target="_blank">${player.usernameTelegram}</a>` : '';
+
+      content += `<tr class="${rowClass}"><td>${player.playerID}</td><td>${player.currentClan}</td><td>${player.playerName}</td><td>${player.trophies}</td><td>${player.grado}</td><td>${player.nomeTelegram}</td><td>${usernameTelegramCellContent}</td></tr>`;
     });
 
     content += '</table>';
