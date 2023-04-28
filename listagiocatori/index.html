@@ -19,7 +19,11 @@
             background-color: white;
             position: sticky;
             top: 0;
-            z-index: 1;
+            z-index: 2;
+        }
+        .content-container {
+            height: 80vh; /* change the height as per your requirement */
+            overflow: auto;
         }
         .generale {
             background-color: lightcoral;
@@ -33,7 +37,7 @@
     </style>
 </head>
 <body>
-    <div id="content"></div>
+    <div class="content-container" id="content"></div>
     <script src="script.js"></script>
 </body>
 </html>
