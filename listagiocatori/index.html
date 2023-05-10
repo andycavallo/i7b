@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista giocatori I7B</title>
+    <title>Spostamenti I7B</title>
     <style>
         table {
             border-collapse: collapse;
@@ -28,7 +28,22 @@
 <body>
     <h2>Filtra per Clan:</h2>
     <select id="clan-filter"></select>
-    <div id="content"></div>
+    <div id="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Clan Name</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Trophies</th>
+                    <th>Grado</th>
+                    <th>Nome Telegram</th>
+                    <th>Username Telegram</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
