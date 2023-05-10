@@ -11,15 +11,16 @@ window.onload = function() {
         .then((response) => response.json())
         .then((data) => {
             allRows = data.values;
+            allRows = allRows.filter(row => row[2]); // Filter out rows without a Clan name
             allRows.shift(); // Remove the header row
+
             let uniqueClans = [...new Set(allRows.map(row => row[2]))];
 
-            // Sort the clans
-            uniqueClans = uniqueClans.sort();
+            // Filter out empty or null values and sort the clans
+            uniqueClans = uniqueClans.filter(clan => clan).sort();
 
             const dropdown = document.getElementById('clan-filter');
             dropdown.innerHTML = '<option value="">All Clans</option>' + uniqueClans.map(clan => `<option value="${clan}">${clan}</option>`).join('');
-
             dropdown.addEventListener('change', (event) => {
                 const selectedClan = event.target.value;
                 updateTable(selectedClan);
