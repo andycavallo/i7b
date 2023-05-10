@@ -23,16 +23,21 @@
         .tenente {
             background-color: lightgreen;
         }
+        #dropdown-container {
+        margin-bottom: 20px; /* Adjust this value as needed */
+        }
     </style>
 </head>
 <body>
-    <h2>Filtra per Clan:</h2>
-    <select id="clan-filter"></select>
+    <div id="dropdown-container">
+        <label for="clan-filter">Filtra per Clan</label>
+        <select id="clan-filter"></select>
+    </div>
     <div id="content">
         <table>
             <thead>
                 <tr>
-                    <th>Clan Name</th>
+                    <th>Clan</th>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Trophies</th>
