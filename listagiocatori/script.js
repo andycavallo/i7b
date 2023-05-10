@@ -1,18 +1,18 @@
-const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; // Replace with your API key
-const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU'; // Replace with your Google Sheet ID
-const sheetName = 'LastDay'; // Replace with your sheet name if different
+const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; 
+const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU';
+const sheetName = 'LastDay';
 
-const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:V?key=${apiKey}`;
+const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:W?key=${apiKey}`;
 
 let allRows = [];
 
 fetch(apiUrl)
   .then((response) => response.json())
   .then((data) => {
-    allRows = data.values;
+    allRows = data.values.filter(row => row[2]); // Exclude rows with an empty Clan Name
     allRows.shift(); // Remove the header row
-    const uniqueClans = [...new Set(allRows.map(row => row[2]))];
-    uniqueClans.sort();
+
+    const uniqueClans = [...new Set(allRows.map(row => row[2]))].filter(Boolean); // Exclude empty Clan Names
 
     const dropdown = document.getElementById('clan-filter');
     dropdown.innerHTML = '<option value="">All Clans</option>' + uniqueClans.map(clan => `<option value="${clan}">${clan}</option>`).join('');
@@ -35,7 +35,7 @@ function updateTable(clanFilter = '') {
     }
     return a[2].localeCompare(b[2]); // Sort by Clan name
   });
-  
+
   const tbody = document.getElementById('content').querySelector('tbody');
   tbody.innerHTML = ''; // Clear the table body
 
@@ -62,4 +62,3 @@ function updateTable(clanFilter = '') {
     tbody.insertAdjacentHTML('beforeend', content);
   });
 }
-
