@@ -1,9 +1,8 @@
-const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; 
-const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU'; 
-const sheetName = 'LastDay';
+const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; // Replace with your API key
+const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU'; // Replace with your Google Sheet ID
+const sheetName = 'LastDay'; // Replace with your sheet name if different
 
-// Now we're fetching up to column "W"
-const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:W?key=${apiKey}`;
+const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:V?key=${apiKey}`;
 
 let allRows = [];
 
@@ -11,8 +10,9 @@ fetch(apiUrl)
   .then((response) => response.json())
   .then((data) => {
     allRows = data.values;
-    allRows = allRows.filter(row => row[2]); // Filter out rows without a Clan Name
-    const uniqueClans = [...new Set(allRows.map(row => row[2]))].sort();
+    allRows.shift(); // Remove the header row
+    const uniqueClans = [...new Set(allRows.map(row => row[2]))];
+    uniqueClans.sort();
 
     const dropdown = document.getElementById('clan-filter');
     dropdown.innerHTML = '<option value="">All Clans</option>' + uniqueClans.map(clan => `<option value="${clan}">${clan}</option>`).join('');
@@ -35,7 +35,7 @@ function updateTable(clanFilter = '') {
     }
     return a[2].localeCompare(b[2]); // Sort by Clan name
   });
-
+  
   const tbody = document.getElementById('content').querySelector('tbody');
   tbody.innerHTML = ''; // Clear the table body
 
@@ -47,7 +47,7 @@ function updateTable(clanFilter = '') {
     const grado = row[19] || '';
     const nomeTelegram = row[20] || '';
     const usernameTelegram = row[21] ? `<a href="https://t.me/${row[21]}" target="_blank">${row[21]}</a>` : '';
-    const nomeDiscord = row[22] || ''; // New variable for "Nome Discord"
+    const nomeDiscord = row[22] || '';
 
     let rowClass = '';
     if (grado.includes('Generale')) {
@@ -62,3 +62,4 @@ function updateTable(clanFilter = '') {
     tbody.insertAdjacentHTML('beforeend', content);
   });
 }
+
