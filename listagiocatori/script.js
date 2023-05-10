@@ -12,7 +12,7 @@ fetch(apiUrl)
     allRows = data.values.filter(row => row[2]); // Exclude rows with an empty Clan Name
     allRows.shift(); // Remove the header row
 
-    const uniqueClans = [...new Set(allRows.map(row => row[2]))].filter(Boolean); // Exclude empty Clan Names
+    const uniqueClans = [...new Set(allRows.map(row => row[2]))].filter(Boolean).sort(); // Exclude empty Clan Names and sort
 
     const dropdown = document.getElementById('clan-filter');
     dropdown.innerHTML = '<option value="">All Clans</option>' + uniqueClans.map(clan => `<option value="${clan}">${clan}</option>`).join('');
