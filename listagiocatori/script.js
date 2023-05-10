@@ -12,7 +12,10 @@ window.onload = function() {
         .then((data) => {
             allRows = data.values;
             allRows.shift(); // Remove the header row
-            const uniqueClans = [...new Set(allRows.map(row => row[2]))];
+            let uniqueClans = [...new Set(allRows.map(row => row[2]))];
+
+            // Sort the clans
+            uniqueClans = uniqueClans.sort();
 
             const dropdown = document.getElementById('clan-filter');
             dropdown.innerHTML = '<option value="">All Clans</option>' + uniqueClans.map(clan => `<option value="${clan}">${clan}</option>`).join('');
@@ -26,15 +29,18 @@ window.onload = function() {
         })
         .catch((error) => console.error('Error fetching data:', error));
 
-    function updateTable(clanFilter = '') {
-        const filteredRows = clanFilter ? allRows.filter(row => row[2] === clanFilter) : [...allRows];
+        function updateTable(clanFilter = '') {
+            let filteredRows = clanFilter ? allRows.filter(row => row[2] === clanFilter) : [...allRows];
 
-        filteredRows.sort((a, b) => {
-            if (a[2] === b[2]) {
-                return b[8] - a[8]; // Sort by Trophies if Clan name is the same
-            }
-            return a[2].localeCompare(b[2]); // Sort by Clan name
-        });
+            // Filter out rows with empty Clan Name
+            filteredRows = filteredRows.filter(row => row[2]);
+
+            filteredRows.sort((a, b) => {
+                if (a[2] === b[2]) {
+                    return b[8] - a[8]; // Sort by Trophies if Clan name is the same
+                }
+                return a[2].localeCompare(b[2]); // Sort by Clan name
+            });
 
         const tbody = document.getElementById('content').querySelector('tbody');
         // Clear the table body
