@@ -86,9 +86,7 @@ function createSummaryTable() {
     const summaryContent = `<tr><td>${clan}</td><td>${playersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td></tr>`;
     summaryTbody.insertAdjacentHTML('beforeend', summaryContent);
   });
-
-  const totalContent = `<tr><td>Total</td><td>${totalPlayers}/150</td><td>${totalTelegram}/150</td><td>${totalDiscord}/150</td></tr>`;
+  const totalContent = `<tr class="total-row"><td>Total</td><td>${totalPlayers}/150</td><td>${totalTelegram}/150</td><td>${totalDiscord}/150</td></tr>`;
   summaryTbody.insertAdjacentHTML('beforeend', totalContent);
-  });
 }
 
