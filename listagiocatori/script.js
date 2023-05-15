@@ -23,6 +23,7 @@ fetch(apiUrl)
     });
 
     updateTable();
+    createSummaryTable();
   })
   .catch((error) => console.error('Error fetching data:', error));
 
@@ -62,3 +63,22 @@ function updateTable(clanFilter = '') {
     tbody.insertAdjacentHTML('beforeend', content);
   });
 }
+
+function createSummaryTable() {
+  const clans = ['I7B', 'I7B2', 'I7B3'];
+
+  const summaryTbody = document.getElementById('summary-content').querySelector('tbody');
+  summaryTbody.innerHTML = ''; // Clear the summary table body
+
+  clans.forEach(clan => {
+    const clanRows = allRows.filter(row => row[2] === clan);
+
+    const totalPlayers = clanRows.length;
+    const telegramPlayers = clanRows.filter(row => row[21]).length; // Count rows with a Telegram username
+    const discordPlayers = clanRows.filter(row => row[22]).length; // Count rows with a Discord name
+
+    const content = `<tr><td>${clan}</td><td>${totalPlayers}/50</td><td>${telegramPlayers}/50</td><td>${discordPlayers}/50</td></tr>`;
+    summaryTbody.insertAdjacentHTML('beforeend', content);
+  });
+}
+
