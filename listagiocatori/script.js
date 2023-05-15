@@ -65,20 +65,30 @@ function updateTable(clanFilter = '') {
 }
 
 function createSummaryTable() {
-  const clans = ['I7B', 'I7B2', 'I7B3'];
-
   const summaryTbody = document.getElementById('summary-content').querySelector('tbody');
   summaryTbody.innerHTML = ''; // Clear the summary table body
 
+  const clans = ['I7B', 'I7B2', 'I7B3'];
+
+  let totalPlayers = 0;
+  let totalTelegram = 0;
+  let totalDiscord = 0;
+
   clans.forEach(clan => {
-    const clanRows = allRows.filter(row => row[2] === clan);
+    const playersInClan = allRows.filter(row => row[2] === clan);
+    const telegramInClan = playersInClan.filter(row => row[20]).length;
+    const discordInClan = playersInClan.filter(row => row[22]).length;
 
-    const totalPlayers = clanRows.length;
-    const telegramPlayers = clanRows.filter(row => row[21]).length; // Count rows with a Telegram username
-    const discordPlayers = clanRows.filter(row => row[22]).length; // Count rows with a Discord name
+    totalPlayers += playersInClan.length;
+    totalTelegram += telegramInClan;
+    totalDiscord += discordInClan;
 
-    const content = `<tr><td>${clan}</td><td>${totalPlayers}/50</td><td>${telegramPlayers}/50</td><td>${discordPlayers}/50</td></tr>`;
-    summaryTbody.insertAdjacentHTML('beforeend', content);
+    const summaryContent = `<tr><td>${clan}</td><td>${playersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td></tr>`;
+    summaryTbody.insertAdjacentHTML('beforeend', summaryContent);
+  });
+
+  const totalContent = `<tr><td>Total</td><td>${totalPlayers}/150</td><td>${totalTelegram}/150</td><td>${totalDiscord}/150</td></tr>`;
+  summaryTbody.insertAdjacentHTML('beforeend', totalContent);
   });
 }
 
