@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
             background-color: lightgreen;
         }
         #dropdown-container {
-        margin-bottom: 20px; /* Adjust this value as needed */
+            margin-bottom: 20px; /* Adjust this value as needed */
         }
     </style>
 </head>
@@ -33,6 +33,24 @@
         <label for="clan-filter">Filtra per Clan</label>
         <select id="clan-filter"></select>
     </div>
+
+    <!-- New Summary Table -->
+    <h2>Summary</h2>
+    <table id="summary-content">
+        <thead>
+            <tr>
+                <th>Clan Name</th>
+                <th>Giocatori</th>
+                <th>Telegram</th>
+                <th>Discord</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Summary data will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+
+    <h2>Dettagli</h2>
     <div id="content">
         <table>
             <thead>
