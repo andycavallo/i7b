@@ -55,12 +55,21 @@ function updateTable(clanFilter = '', showMultipleAccounts = false) {
         });
     }
 
-  filteredRows.sort((a, b) => {
-    if (a[2] === b[2]) {
-        return b[8] - a[8]; // Sort by Trophies if Clan name is the same
-    }
-    return a[2].localeCompare(b[2]); // Sort by Clan name
-});
+    // Sorting rows - multiple accounts first, then by Clan name and Trophies
+    filteredRows.sort((a, b) => {
+        const aUsername = a[21];
+        const bUsername = b[21];
+        const aMultiple = aUsername && usernameToRows[aUsername].length > 1;
+        const bMultiple = bUsername && usernameToRows[bUsername].length > 1;
+
+        if (aMultiple && !bMultiple) return -1;
+        if (!aMultiple && bMultiple) return 1;
+
+        if (a[2] === b[2]) {
+            return b[8] - a[8]; // Sort by Trophies if Clan name is the same
+        }
+        return a[2].localeCompare(b[2]); // Sort by Clan name
+    });
 
 const tbody = document.getElementById('content').querySelector('tbody');
 tbody.innerHTML = ''; // Clear the table body
