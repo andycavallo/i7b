@@ -16,7 +16,7 @@ fetch(apiUrl)
     // Create a mapping of usernames to rows
     usernameToRows = allRows.reduce((map, row) => {
         const username = row[21];
-        if (username) { // Add this line to check if the username is not empty
+        if (username) { // Only map rows with a username
             if (!map[username]) {
                 map[username] = [];
             }
@@ -24,7 +24,7 @@ fetch(apiUrl)
         }
         return map;
     }, {});
-  
+
     const uniqueClans = [...new Set(allRows.map(row => row[2]))].filter(Boolean).sort(); // Exclude empty Clan Names and sort
 
     const dropdown = document.getElementById('clan-filter');
@@ -46,14 +46,13 @@ fetch(apiUrl)
   .catch((error) => console.error('Error fetching data:', error));
 
 function updateTable(clanFilter = '', showMultipleAccounts = false) {
-    let filteredRows = clanFilter ? allRows.filter(row => row[2] === clanFilter) : [...allRows];
+  let filteredRows = clanFilter ? allRows.filter(row => row[2] === clanFilter) : [...allRows];
 
-    if (showMultipleAccounts) {
-        filteredRows = filteredRows.filter(row => {
-            const username = row[21];
-            return username && usernameToRows[username].length > 1;
-        });
-    }
+  if (showMultipleAccounts) {
+    filteredRows = filteredRows.filter(row => {
+        const username = row[21];
+        return username && usernameToRows[username].length > 1;
+    });
 
     // Sorting rows - multiple accounts first, then by Clan name and Trophies
     filteredRows.sort((a, b) => {
@@ -70,11 +69,18 @@ function updateTable(clanFilter = '', showMultipleAccounts = false) {
         }
         return a[2].localeCompare(b[2]); // Sort by Clan name
     });
+  } else {
+    filteredRows.sort((a, b) => {
+    if (a[2] === b[2]) {
+        return b[8] - a[8]; // Sort by Trophies if Clan name is the same
+    }
+    return a[2].localeCompare(b[2]); // Sort by Clan name
+  });
 
-const tbody = document.getElementById('content').querySelector('tbody');
-tbody.innerHTML = ''; // Clear the table body
+  const tbody = document.getElementById('content').querySelector('tbody');
+  tbody.innerHTML = ''; // Clear the table body
 
-filteredRows.forEach(row => {
+  filteredRows.forEach(row => {
     const clanName = row[2];
     const id = row[6] || '';
     const name = row[7] || '';
@@ -86,17 +92,16 @@ filteredRows.forEach(row => {
 
     let rowClass = '';
     if (grado.includes('Generale')) {
-        rowClass = 'generale';
+      rowClass = 'generale';
     } else if (grado.includes('Capitano')) {
-        rowClass = 'capitano';
+      rowClass = 'capitano';
     } else if (grado.includes('Tenente')) {
-        rowClass = 'tenente';
+      rowClass = 'tenente';
     }
 
     const content = `<tr class="${rowClass}"><td>${clanName}</td><td>${id}</td><td>${name}</td><td>${trophies}</td><td>${grado}</td><td>${nomeTelegram}</td><td>${usernameTelegram}</td><td>${nomeDiscord}</td></tr>`;
     tbody.insertAdjacentHTML('beforeend', content);
-});
-
+  });
 }
 
 function createSummaryTable() {
@@ -121,7 +126,8 @@ function createSummaryTable() {
     const summaryContent = `<tr><td>${clan}</td><td>${playersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td></tr>`;
     summaryTbody.insertAdjacentHTML('beforeend', summaryContent);
   });
-   const totalContent = `<tr class="total-row"><td>Total</td><td>${totalPlayers}/150</td><td>${totalTelegram}/150</td><td>${totalDiscord}/150</td></tr>`;
+  
+  const totalContent = `<tr class="total-row"><td>Total</td><td>${totalPlayers}/150</td><td>${totalTelegram}/150</td><td>${totalDiscord}/150</td></tr>`;
   summaryTbody.insertAdjacentHTML('beforeend', totalContent);
 }
 
