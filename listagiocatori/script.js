@@ -46,11 +46,14 @@ fetch(apiUrl)
   .catch((error) => console.error('Error fetching data:', error));
 
 function updateTable(clanFilter = '', showMultipleAccounts = false) {
-  let filteredRows = clanFilter ? allRows.filter(row => row[2] === clanFilter) : [...allRows];
+    let filteredRows = clanFilter ? allRows.filter(row => row[2] === clanFilter) : [...allRows];
 
-  if (showMultipleAccounts) {
-      filteredRows = filteredRows.filter(row => usernameToRows[row[21]].length > 1);
-  }
+    if (showMultipleAccounts) {
+        filteredRows = filteredRows.filter(row => {
+            const username = row[21];
+            return username && usernameToRows[username].length > 1;
+        });
+    }
 
   filteredRows.sort((a, b) => {
     if (a[2] === b[2]) {
