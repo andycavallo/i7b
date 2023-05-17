@@ -54,20 +54,20 @@ function updateTable(clanFilter = '', showMultipleAccounts = false) {
         return username && usernameToRows[username].length > 1;
     });
 
-    // Sorting rows - multiple accounts first, then by Clan name and Trophies
+    // Sorting rows - username first, then by Clan name and Trophies
     filteredRows.sort((a, b) => {
         const aUsername = a[21];
         const bUsername = b[21];
-        const aMultiple = aUsername && usernameToRows[aUsername].length > 1;
-        const bMultiple = bUsername && usernameToRows[bUsername].length > 1;
 
-        if (aMultiple && !bMultiple) return -1;
-        if (!aMultiple && bMultiple) return 1;
+        if (aUsername !== bUsername) {
+            return aUsername.localeCompare(bUsername); // Sort by username
+        } 
 
-        if (a[2] === b[2]) {
-            return b[8] - a[8]; // Sort by Trophies if Clan name is the same
+        if (a[2] !== b[2]) {
+            return a[2].localeCompare(b[2]); // If usernames are the same, sort by Clan name
         }
-        return a[2].localeCompare(b[2]); // Sort by Clan name
+
+        return b[8] - a[8]; // If Clan names are also the same, sort by Trophies
     });
   } else {
     filteredRows.sort((a, b) => {
