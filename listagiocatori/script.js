@@ -16,13 +16,15 @@ fetch(apiUrl)
     // Create a mapping of usernames to rows
     usernameToRows = allRows.reduce((map, row) => {
         const username = row[21];
-        if (!map[username]) {
-            map[username] = [];
+        if (username) { // Add this line to check if the username is not empty
+            if (!map[username]) {
+                map[username] = [];
+            }
+            map[username].push(row);
         }
-        map[username].push(row);
         return map;
     }, {});
-
+  
     const uniqueClans = [...new Set(allRows.map(row => row[2]))].filter(Boolean).sort(); // Exclude empty Clan Names and sort
 
     const dropdown = document.getElementById('clan-filter');
