@@ -39,6 +39,14 @@ function simulateScoreAfterMovements() {
         }
     });
 
+    // Arrotonda i punteggi per ciascun clan
+    for (const clan in clanScoresAfterMovements) {
+        clanScoresAfterMovements[clan] = Math.round(clanScoresAfterMovements[clan]);
+    }
+
+    return clanScoresAfterMovements;
+}
+
     return clanScoresAfterMovements;
 }
 
