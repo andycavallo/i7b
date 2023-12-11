@@ -127,6 +127,9 @@ function createSummaryTable() {
 
         clanScore = Math.round(clanScore); // Arrotonda il punteggio
 
+        const telegramInClan = sortedPlayersInClan.filter(row => row[20]).length;
+        const discordInClan = sortedPlayersInClan.filter(row => row[22]).length;
+
         const summaryContent = `<tr><td>${clan}</td><td>${sortedPlayersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td><td>${clanScore}</td></tr>`;
         summaryTbody.insertAdjacentHTML('beforeend', summaryContent);
     });
