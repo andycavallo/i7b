@@ -110,26 +110,26 @@ function createSummaryTable() {
     const clans = ['I7B', 'I7B2', 'I7B3'];
 
     clans.forEach(clan => {
-        const playersInClan = allRows.filter(row => row[2] === clan).slice(0, 50);
-        const telegramInClan = playersInClan.filter(row => row[20]).length;
-        const discordInClan = playersInClan.filter(row => row[22]).length;
+        const playersInClan = allRows.filter(row => row[2] === clan);
+        const sortedPlayersInClan = playersInClan.sort((a, b) => b[8] - a[8]).slice(0, 50); // Ordina i giocatori per coppe e prendi i primi 50
+        const telegramInClan = sortedPlayersInClan.filter(row => row[20]).length;
+        const discordInClan = sortedPlayersInClan.filter(row => row[22]).length;
 
         let clanScore = 0;
-        playersInClan.forEach((row, index) => {
+        sortedPlayersInClan.forEach((row, index) => {
             let multiplier = 0;
-            if (index === 0) multiplier = 0.5;
-            else if (index >= 1 && index < 10) multiplier = 0.4;
-            else if (index >= 10 && index < 20) multiplier = 0.3;
-            else if (index >= 20 && index < 30) multiplier = 0.2;
-            else if (index >= 30 && index < 40) multiplier = 0.1;
-            else if (index >= 40) multiplier = 0.05;
+            if (index === 0) multiplier = 0.5; // Primo giocatore nel clan
+            else if (index >= 1 && index < 10) multiplier = 0.4; // Dal secondo al decimo
+            else if (index >= 10 && index < 20) multiplier = 0.3; // Dall'11° al 20°
+            else if (index >= 20 && index < 30) multiplier = 0.2; // Dal 21° al 30°
+            else if (index >= 30 && index < 40) multiplier = 0.1; // Dal 31° al 40°
+            else if (index >= 40) multiplier = 0.05; // Dal 41° in poi
             clanScore += parseInt(row[8]) * multiplier;
         });
 
-        clanScore = Math.round(clanScore); // Arrotonda il punteggio a un numero intero
+        clanScore = Math.round(clanScore); // Arrotonda il punteggio
 
-        const summaryContent = `<tr><td>${clan}</td><td>${playersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td><td>${clanScore}</td></tr>`;
+        const summaryContent = `<tr><td>${clan}</td><td>${sortedPlayersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td><td>${clanScore}</td></tr>`;
         summaryTbody.insertAdjacentHTML('beforeend', summaryContent);
     });
 }
-
