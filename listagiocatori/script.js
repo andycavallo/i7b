@@ -112,19 +112,17 @@ function createSummaryTable() {
     clans.forEach(clan => {
         const playersInClan = allRows.filter(row => row[2] === clan);
         const sortedPlayersInClan = playersInClan.sort((a, b) => b[8] - a[8]).slice(0, 50); // Ordina i giocatori per coppe e prendi i primi 50
-        const telegramInClan = sortedPlayersInClan.filter(row => row[20]).length;
-        const discordInClan = sortedPlayersInClan.filter(row => row[22]).length;
 
         let clanScore = 0;
         sortedPlayersInClan.forEach((row, index) => {
             let multiplier = 0;
             if (index === 0) multiplier = 0.5; // Primo giocatore nel clan
-            else if (index < 10) multiplier = 0.4; // Dal secondo al decimo
-            else if (index < 20) multiplier = 0.3; // Dall'11° al 20°
-            else if (index < 30) multiplier = 0.2; // Dal 21° al 30°
-            else if (index < 40) multiplier = 0.1; // Dal 31° al 40°
-            else if (index < 50) multiplier = 0.05; // Dal 41° al 50°
-            clanScore += parseInt(row[8]) * multiplier;
+            else if (index < 10) multiplier = 0.4; // Dal secondo al decimo giocatore
+            else if (index < 20) multiplier = 0.3; // Dall'11° al 20° giocatore
+            else if (index < 30) multiplier = 0.2; // Dal 21° al 30° giocatore
+            else if (index < 40) multiplier = 0.1; // Dal 31° al 40° giocatore
+            else if (index < 50) multiplier = 0.05; // Dal 41° al 50° giocatore
+            clanScore += parseInt(row[8], 10) * multiplier; // Calcola il punteggio
         });
 
         clanScore = Math.round(clanScore); // Arrotonda il punteggio
