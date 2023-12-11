@@ -103,6 +103,29 @@ function updateTable(clanFilter = '', showMultipleAccounts = false) {
     });
 }
 
+function simulateScoreAfterMovements() {
+    const allPlayers = allRows.map(row => ({
+        clan: row[2],
+        trophies: parseFloat(row[8]),
+    })).sort((a, b) => b.trophies - a.trophies);
+
+    const clans = ['I7B', 'I7B2', 'I7B3'];
+    const clanLimits = { 'I7B': 50, 'I7B2': 50, 'I7B3': 50 };
+    const clanScoresAfterMovements = { 'I7B': 0, 'I7B2': 0, 'I7B3': 0 };
+
+    allPlayers.forEach((player, index) => {
+        for (const clan of clans) {
+            if (clanLimits[clan] > 0) {
+                clanLimits[clan]--;
+                clanScoresAfterMovements[clan] += calculate_score(index % 50, player.trophies);
+                break;
+            }
+        }
+    });
+
+    return clanScoresAfterMovements;
+}
+
 function createSummaryTable() {
     const summaryTbody = document.getElementById('summary-content').querySelector('tbody');
     summaryTbody.innerHTML = '';
@@ -132,6 +155,8 @@ function createSummaryTable() {
 
         const summaryContent = `<tr><td>${clan}</td><td>${sortedPlayersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td><td>${clanScore}</td></tr>`;
         summaryTbody.insertAdjacentHTML('beforeend', summaryContent);
+
+        const scoresAfterMovements = simulateScoreAfterMovements();
     });
 }
 
