@@ -47,9 +47,6 @@ function simulateScoreAfterMovements() {
     return clanScoresAfterMovements;
 }
 
-    return clanScoresAfterMovements;
-}
-
 function updateTable(clanFilter = '', showMultipleAccounts = false) {
     let filteredRows = clanFilter ? allRows.filter(row => row[2] === clanFilter) : [...allRows];
 
