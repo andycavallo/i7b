@@ -117,7 +117,8 @@ function createSummaryTable() {
         let clanScore = 0;
         playersInClan.forEach((row, index) => {
             let multiplier = 0;
-            if (index < 10) multiplier = 0.4;
+            if (index === 0) multiplier = 0.5;
+            else if (index >= 1 && index < 10) multiplier = 0.4;
             else if (index >= 10 && index < 20) multiplier = 0.3;
             else if (index >= 20 && index < 30) multiplier = 0.2;
             else if (index >= 30 && index < 40) multiplier = 0.1;
@@ -125,7 +126,10 @@ function createSummaryTable() {
             clanScore += parseInt(row[8]) * multiplier;
         });
 
-        const summaryContent = `<tr><td>${clan}</td><td>${playersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td><td>${clanScore.toFixed(2)}</td></tr>`;
+        clanScore = Math.round(clanScore); // Arrotonda il punteggio a un numero intero
+
+        const summaryContent = `<tr><td>${clan}</td><td>${playersInClan.length}/50</td><td>${telegramInClan}/50</td><td>${discordInClan}/50</td><td>${clanScore}</td></tr>`;
         summaryTbody.insertAdjacentHTML('beforeend', summaryContent);
     });
 }
+
