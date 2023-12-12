@@ -140,7 +140,7 @@ fetch(apiUrl)
         allRows.shift();
 
         // Estrai il numero del giorno dalla prima riga (dopo l'intestazione)
-        const dayNumber = allRows[0][10]; // Assumendo che la colonna 11 sia l'indice 10 (l'indice inizia da 0)
+        const dayNumber = allRows[0][11]; 
         document.getElementById('page-title').innerText += dayNumber; // Aggiorna il titolo
         
         usernameToRows = allRows.reduce((map, row) => {
