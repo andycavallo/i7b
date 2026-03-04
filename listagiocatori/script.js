@@ -25,9 +25,9 @@ function simulateScoreAfterMovements() {
         trophies: parseFloat(row[8]),
     })).sort((a, b) => b.trophies - a.trophies);
 
-    const clans = ['I7B', 'I7B2', 'I7B3'];
-    const clanLimits = { 'I7B': 50, 'I7B2': 50, 'I7B3': 50 };
-    const clanScoresAfterMovements = { 'I7B': 0, 'I7B2': 0, 'I7B3': 0 };
+    const clans = ['MII1', 'MII2', 'MII3', 'MII4'];
+    const clanLimits = { 'MII1': 50, 'MII2': 50, 'MII3': 50, 'MII4': 50 };
+    const clanScoresAfterMovements = { 'MII1': 0, 'MII2': 0, 'MII3': 0, 'MII4': 0 };
 
     allPlayers.forEach((player, index) => {
         for (const clan of clans) {
@@ -39,7 +39,6 @@ function simulateScoreAfterMovements() {
         }
     });
 
-    // Arrotonda i punteggi per ciascun clan
     for (const clan in clanScoresAfterMovements) {
         clanScoresAfterMovements[clan] = Math.round(clanScoresAfterMovements[clan]);
     }
@@ -111,7 +110,7 @@ function createSummaryTable() {
     summaryTbody.innerHTML = '';
 
     const scoresAfterMovements = simulateScoreAfterMovements();
-    const clans = ['I7B', 'I7B2', 'I7B3'];
+    const clans = ['MII1', 'MII2', 'MII3', 'MII4'];
 
     clans.forEach(clan => {
         const playersInClan = allRows.filter(row => row[2] === clan);
@@ -139,10 +138,9 @@ fetch(apiUrl)
         allRows = data.values.filter(row => row[2]);
         allRows.shift();
 
-        // Estrai il numero del giorno dalla prima riga (dopo l'intestazione)
-        const dayNumber = allRows[0][11]; 
-        document.getElementById('page-title').innerText += dayNumber; // Aggiorna il titolo
-        
+        const dayNumber = allRows[0][11];
+        document.getElementById('page-title').innerText += dayNumber;
+
         usernameToRows = allRows.reduce((map, row) => {
             const username = row[21];
             if (username) {
