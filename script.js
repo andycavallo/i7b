@@ -1,8 +1,6 @@
-const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I'; // Replace with your API key
-const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU'; // Replace with your Google Sheet ID
-const sheetName = 'LastDay'; // Replace with your sheet name if different
-
-// Replace 'A1:D10' with the range you want to fetch from your Google Sheet
+const apiKey = 'AIzaSyAMwp2PrmXiQj2Qyi0v3TJVWFD5Jl0eF2I';
+const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU';
+const sheetName = 'LastDay';
 const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:S?key=${apiKey}`;
 
 fetch(apiUrl)
@@ -10,31 +8,27 @@ fetch(apiUrl)
   .then((data) => {
     const rows = data.values;
     let content = '<table>';
-
     rows.forEach((row, rowIndex) => {
       const rank = parseInt(row[0]);
       const currentClan = row[2];
 
       let targetClan;
       if (rank >= 1 && rank <= 50) {
-        targetClan = 'I7B';
+        targetClan = 'MII1';
       } else if (rank >= 51 && rank <= 100) {
-        targetClan = 'I7B2';
+        targetClan = 'MII2';
+      } else if (rank >= 101 && rank <= 150) {
+        targetClan = 'MII3';
       } else {
-        targetClan = 'I7B3';
+        targetClan = 'MII4';
       }
 
       const spostamento = currentClan !== targetClan ? `${currentClan} -> ${targetClan}` : '';
-
-      // Add 'change-clan' class if the player needs to change their clan
       const rowClass = spostamento && rowIndex !== 0 ? 'change-clan' : '';
-
-      // Set the header text for the Spostamento column
       const spostamentoHeaderText = rowIndex === 0 ? 'Spostamento' : spostamento;
 
       content += `<tr class="${rowClass}"><td>${row[0]}</td><td>${row[2]}</td><td>${row[7]}</td><td>${row[8]}</td><td>${row[11]}</td><td>${spostamentoHeaderText}</td></tr>`;
     });
-
     content += '</table>';
     document.getElementById('content').innerHTML = content;
   })
