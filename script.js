@@ -1,10 +1,26 @@
-const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
+const apiKey = window.APP_CONFIG?.googleSheetsApiKey;
+if (!apiKey) {
+  const contentElement = document.getElementById('content');
+  if (contentElement) contentElement.textContent = 'Configurazione Google mancante.';
+  throw new Error('Missing window.APP_CONFIG.googleSheetsApiKey');
+}
+
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}[character]));
 const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU';
 const sheetName = 'LastDay';
-const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:S?key=${apiKey}`;
+const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:S?key=${encodeURIComponent(apiKey)}`;
 
 fetch(apiUrl)
-  .then((response) => response.json())
+  .then((response) => {
+    if (!response.ok) throw new Error(`Google Sheets API returned HTTP ${response.status}`);
+    return response.json();
+  })
   .then((data) => {
     const rows = data.values;
     let content = '<table>';
@@ -27,7 +43,7 @@ fetch(apiUrl)
       const rowClass = spostamento && rowIndex !== 0 ? 'change-clan' : '';
       const spostamentoHeaderText = rowIndex === 0 ? 'Spostamento' : spostamento;
 
-      content += `<tr class="${rowClass}"><td>${row[0]}</td><td>${row[2]}</td><td>${row[7]}</td><td>${row[8]}</td><td>${row[11]}</td><td>${spostamentoHeaderText}</td></tr>`;
+      content += `<tr class="${rowClass}"><td>${escapeHtml(row[0])}</td><td>${escapeHtml(row[2])}</td><td>${escapeHtml(row[7])}</td><td>${escapeHtml(row[8])}</td><td>${escapeHtml(row[11])}</td><td>${escapeHtml(spostamentoHeaderText)}</td></tr>`;
     });
     content += '</table>';
     document.getElementById('content').innerHTML = content;

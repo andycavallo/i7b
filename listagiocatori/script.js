@@ -1,8 +1,21 @@
-const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
+const apiKey = window.APP_CONFIG?.googleSheetsApiKey;
+if (!apiKey) {
+  const contentElement = document.getElementById('content');
+  if (contentElement) contentElement.textContent = 'Configurazione Google mancante.';
+  throw new Error('Missing window.APP_CONFIG.googleSheetsApiKey');
+}
+
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+}[character]));
 const sheetId = '16gHjqHQJCbZApcKYUCtJkcoIsIKcJ30VkK-OVaYqwUU';
 const sheetName = 'LastDay';
 
-const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:W?key=${apiKey}`;
+const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:W?key=${encodeURIComponent(apiKey)}`;
 
 let allRows = [];
 let usernameToRows = {};
@@ -88,7 +101,8 @@ function updateTable(clanFilter = '', showMultipleAccounts = false) {
         const trophies = row[8] || '';
         const grado = row[19] || '';
         const nomeTelegram = row[20] || '';
-        const usernameTelegram = row[21] ? `<a href="https://t.me/${row[21]}" target="_blank">${row[21]}</a>` : '';
+        const telegramUsername = row[21] ? String(row[21]) : '';
+        const usernameTelegram = telegramUsername ? `<a href="https://t.me/${encodeURIComponent(telegramUsername)}" target="_blank" rel="noopener noreferrer">${escapeHtml(telegramUsername)}</a>` : '';
         const nomeDiscord = row[22] || '';
 
         let rowClass = '';
@@ -100,7 +114,7 @@ function updateTable(clanFilter = '', showMultipleAccounts = false) {
             rowClass = 'tenente';
         }
 
-        const content = `<tr class="${rowClass}"><td>${clanName}</td><td>${id}</td><td>${name}</td><td>${trophies}</td><td>${grado}</td><td>${nomeTelegram}</td><td>${usernameTelegram}</td><td>${nomeDiscord}</td></tr>`;
+        const content = `<tr class="${rowClass}"><td>${escapeHtml(clanName)}</td><td>${escapeHtml(id)}</td><td>${escapeHtml(name)}</td><td>${escapeHtml(trophies)}</td><td>${escapeHtml(grado)}</td><td>${escapeHtml(nomeTelegram)}</td><td>${usernameTelegram}</td><td>${escapeHtml(nomeDiscord)}</td></tr>`;
         tbody.insertAdjacentHTML('beforeend', content);
     });
 }
@@ -133,7 +147,10 @@ function createSummaryTable() {
 }
 
 fetch(apiUrl)
-    .then((response) => response.json())
+    .then((response) => {
+        if (!response.ok) throw new Error(`Google Sheets API returned HTTP ${response.status}`);
+        return response.json();
+    })
     .then((data) => {
         allRows = data.values.filter(row => row[2]);
         allRows.shift();
@@ -155,7 +172,7 @@ fetch(apiUrl)
         const uniqueClans = [...new Set(allRows.map(row => row[2]))].filter(Boolean).sort();
 
         const dropdown = document.getElementById('clan-filter');
-        dropdown.innerHTML = '<option value="">All Clans</option>' + uniqueClans.map(clan => `<option value="${clan}">${clan}</option>`).join('');
+        dropdown.innerHTML = '<option value="">All Clans</option>' + uniqueClans.map(clan => `<option value="${escapeHtml(clan)}">${escapeHtml(clan)}</option>`).join('');
 
         dropdown.addEventListener('change', (event) => {
             const selectedClan = event.target.value;
