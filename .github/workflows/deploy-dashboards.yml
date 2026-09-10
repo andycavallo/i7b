@@ -1,0 +1,74 @@
+name: Deploy dashboards to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build static site with runtime configuration
+        env:
+          GOOGLE_SHEETS_BROWSER_API_KEY: ${{ secrets.GOOGLE_SHEETS_BROWSER_API_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$GOOGLE_SHEETS_BROWSER_API_KEY"
+          python - <<'PY'
+          import json
+          import os
+          import shutil
+          from pathlib import Path
+
+          root = Path.cwd()
+          site = root / "_site"
+          site.mkdir()
+
+          for relative in ("index.html", "script.js", "fusione", "listagiocatori"):
+              source = root / relative
+              target = site / relative
+              if source.is_dir():
+                  shutil.copytree(source, target)
+              else:
+                  shutil.copy2(source, target)
+
+          config = (
+              "window.APP_CONFIG = Object.freeze({\n"
+              f"  googleSheetsApiKey: {json.dumps(os.environ['GOOGLE_SHEETS_BROWSER_API_KEY'])}\n"
+              "});\n"
+          )
+          (site / "config.js").write_text(config, encoding="utf-8")
+          PY
+          test -s _site/config.js
+          test -f _site/index.html
+          test -f _site/listagiocatori/index.html
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
